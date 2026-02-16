@@ -1,0 +1,54 @@
+<%- include('partials/header', { title: 'Attendance Records - University Portal' }) %>
+
+<section class="card single">
+  <h2>Attendance Records</h2>
+  <p class="muted">Filter records by class and date range.</p>
+  <form method="GET" action="/attendance/records" class="form-inline" style="margin-top:0.75rem">
+    <div>
+      <label>Class</label>
+      <select name="class_id" required>
+        <% classes.forEach((cls) => { %>
+          <option value="<%= cls.id %>" <%= cls.id === selectedClassId ? 'selected' : '' %>><%= cls.code %> - <%= cls.title %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div>
+      <label>From</label>
+      <input type="date" name="from" value="<%= fromDate %>" required />
+    </div>
+    <div>
+      <label>To</label>
+      <input type="date" name="to" value="<%= toDate %>" required />
+    </div>
+    <button class="btn" type="submit">View Records</button>
+  </form>
+</section>
+
+<section class="card single">
+  <% if (records.length === 0) { %>
+    <p class="muted">No attendance records found for selected criteria.</p>
+  <% } else { %>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Student</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% records.forEach((row) => { %>
+            <tr>
+              <td><%= row.attendance_date %></td>
+              <td><%= row.full_name %></td>
+              <td><span class="badge <%= row.status === 'Present' ? 'green' : 'red' %>"><%= row.status %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

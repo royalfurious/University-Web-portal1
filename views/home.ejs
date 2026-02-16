@@ -1,0 +1,27 @@
+<%- include('partials/header', { title: 'Home - University Portal' }) %>
+
+<section class="hero">
+  <div>
+    <h2>Welcome to University Central Portal</h2>
+    <p>Access courses, attendance, assignments, and faculty resources from one platform.</p>
+    <div class="cta-row">
+      <a class="btn" href="/login">Get Started</a>
+      <a class="btn btn-outline" href="/about">Explore Campus</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Upcoming Events & News</h3>
+  <div id="eventsGrid" class="cards">
+    <% events.forEach((event) => { %>
+      <article class="card">
+        <h4><%= event.title %></h4>
+        <p><%= event.details %></p>
+        <small><strong>Date:</strong> <%= event.event_date %></small>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

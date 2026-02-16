@@ -1,0 +1,35 @@
+<%- include('partials/header', { title: 'My Attendance - University Portal' }) %>
+
+<section class="card single">
+  <h2>My Attendance</h2>
+  <p class="muted">View your personal attendance history across enrolled courses.</p>
+</section>
+
+<section class="card single">
+  <% if (!records || records.length === 0) { %>
+    <p>No attendance records available yet.</p>
+  <% } else { %>
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Course</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% records.forEach((row) => { %>
+          <tr>
+            <td><%= row.attendance_date %></td>
+            <td><%= row.code %> - <%= row.title %></td>
+            <td><span class="badge <%= row.status === 'Present' ? 'green' : 'red' %>"><%= row.status %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

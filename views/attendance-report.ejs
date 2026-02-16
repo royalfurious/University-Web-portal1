@@ -1,0 +1,36 @@
+<%- include('partials/header', { title: 'Attendance Report - University Portal' }) %>
+
+<section class="card single">
+  <h2>Attendance Report</h2>
+  <p class="muted">Summary of attendance percentages across all classes.</p>
+  <% if (report.length === 0) { %>
+    <p class="muted" style="margin-top:0.5rem">No attendance report data available yet.</p>
+  <% } else { %>
+    <div class="table-wrap" style="margin-top:0.75rem">
+    <table>
+      <thead>
+        <tr>
+          <th>Class</th>
+          <th>Student</th>
+          <th>Present</th>
+          <th>Total Marked</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% report.forEach((row) => { %>
+          <tr>
+            <td><%= row.code %> - <%= row.title %></td>
+            <td><%= row.full_name %></td>
+            <td><%= row.total_present %></td>
+            <td><%= row.total_marked %></td>
+            <td><strong><%= row.attendance_percentage %>%</strong></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

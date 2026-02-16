@@ -1,0 +1,33 @@
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <h4>Contact</h4>
+        <p>Email: info@uni.edu</p>
+        <p>Phone: +1 555 321 7788</p>
+      </div>
+      <div>
+        <h4>Address</h4>
+        <p>123 University Avenue, Academic City</p>
+        <p>Mon - Fri: 8:00 AM to 6:00 PM</p>
+      </div>
+      <div>
+        <h4>Follow Us</h4>
+        <p>
+          <a href="#">LinkedIn</a> |
+          <a href="#">X</a> |
+          <a href="#">YouTube</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <script src="/public/js/events.js"></script>
+  <script>
+    document.getElementById('navToggle').addEventListener('click', function () {
+      document.getElementById('mainNav').classList.toggle('open');
+      var actions = document.querySelector('.header-actions');
+      if (actions) actions.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

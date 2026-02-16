@@ -1,0 +1,131 @@
+<%- include('partials/header', { title: 'Admin Panel - University Portal' }) %>
+
+<section class="card single">
+  <h2>Admin Panel</h2>
+  <p class="muted">Manage users, classes, faculty assignment, and password resets.</p>
+  <% if (error) { %><p class="error"><%= error %></p><% } %>
+  <% if (success) { %><p class="success"><%= success %></p><% } %>
+</section>
+
+<section class="admin-forms">
+  <article class="card">
+    <h3>Add Student / Faculty</h3>
+    <form method="POST" action="/admin/users">
+      <label>Full Name</label>
+      <input type="text" name="full_name" required placeholder="Enter full name" />
+      <label>Email</label>
+      <input type="email" name="email" required placeholder="user@uni.edu" />
+      <label>Password</label>
+      <input type="password" name="password" minlength="6" required placeholder="Minimum 6 characters" />
+      <label>Role</label>
+      <select name="role" required>
+        <option value="student">Student</option>
+        <option value="faculty">Faculty</option>
+      </select>
+      <button class="btn" type="submit">Create User</button>
+    </form>
+  </article>
+
+  <article class="card">
+    <h3>Create Course / Class</h3>
+    <form method="POST" action="/admin/classes">
+      <label>Course Code</label>
+      <input type="text" name="code" required placeholder="e.g. CSE202" />
+      <label>Title</label>
+      <input type="text" name="title" required placeholder="Course title" />
+      <label>Assign Faculty (Optional)</label>
+      <select name="faculty_id">
+        <option value="">-- Select Faculty --</option>
+        <% faculties.forEach((f) => { %>
+          <option value="<%= f.id %>"><%= f.full_name %></option>
+        <% }) %>
+      </select>
+      <button class="btn" type="submit">Create Class</button>
+    </form>
+  </article>
+</section>
+
+<section class="card single">
+  <h3>Manage Users</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Reset Password</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach((u) => { %>
+          <tr>
+            <td><%= u.full_name %></td>
+            <td><%= u.email %></td>
+            <td><span class="badge <%= u.role === 'admin' ? 'green' : '' %>"><%= u.role %></span></td>
+            <td>
+              <form method="POST" action="/admin/users/<%= u.id %>/reset-password" class="form-inline">
+                <input type="password" name="new_password" minlength="6" placeholder="New password" required />
+                <button class="btn btn-sm" type="submit">Reset</button>
+              </form>
+            </td>
+            <td>
+              <% if (u.role !== 'admin') { %>
+                <form method="POST" action="/admin/users/<%= u.id %>/delete">
+                  <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                </form>
+              <% } else { %>
+                <span class="muted">Protected</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card single">
+  <h3>Manage Classes</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Title</th>
+          <th>Assigned Faculty</th>
+          <th>Assign Faculty</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% classes.forEach((c) => { %>
+          <tr>
+            <td><strong><%= c.code %></strong></td>
+            <td><%= c.title %></td>
+            <td><%= c.faculty_name || '<em>Unassigned</em>' %></td>
+            <td>
+              <form method="POST" action="/admin/classes/<%= c.id %>/assign-faculty" class="form-inline">
+                <select name="faculty_id" required>
+                  <option value="">Select faculty</option>
+                  <% faculties.forEach((f) => { %>
+                    <option value="<%= f.id %>" <%= c.faculty_id === f.id ? 'selected' : '' %>><%= f.full_name %></option>
+                  <% }) %>
+                </select>
+                <button class="btn btn-sm" type="submit">Assign</button>
+              </form>
+            </td>
+            <td>
+              <form method="POST" action="/admin/classes/<%= c.id %>/delete">
+                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

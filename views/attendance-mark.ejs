@@ -1,0 +1,60 @@
+<%- include('partials/header', { title: 'Mark Attendance - University Portal' }) %>
+
+<section class="card single">
+  <h2>Mark Attendance</h2>
+  <p class="muted">Select a class and date, then mark each student's attendance.</p>
+  <form method="GET" action="/attendance/mark" class="form-inline" style="margin-top:0.75rem">
+    <div>
+      <label>Class</label>
+      <select name="class_id" required>
+        <% classes.forEach((cls) => { %>
+          <option value="<%= cls.id %>" <%= cls.id === selectedClassId ? 'selected' : '' %>><%= cls.code %> - <%= cls.title %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div>
+      <label>Date</label>
+      <input type="date" name="date" value="<%= selectedDate %>" required />
+    </div>
+    <button class="btn" type="submit">Load Students</button>
+  </form>
+</section>
+
+<section class="card single">
+  <form method="POST" action="/attendance/mark">
+    <input type="hidden" name="class_id" value="<%= selectedClassId %>" />
+    <input type="hidden" name="attendance_date" value="<%= selectedDate %>" />
+
+    <% if (students.length === 0) { %>
+      <p class="muted">No students found for this class.</p>
+    <% } else { %>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% students.forEach((student) => { %>
+              <tr>
+                <td>
+                  <%= student.full_name %>
+                  <input type="hidden" name="student_ids" value="<%= student.id %>" />
+                </td>
+                <td>
+                  <label style="display:inline;margin:0"><input type="radio" name="status_<%= student.id %>" value="Present" checked /> Present</label>
+                  <label style="display:inline;margin:0 0 0 0.75rem"><input type="radio" name="status_<%= student.id %>" value="Absent" /> Absent</label>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <button class="btn" type="submit" style="margin-top:0.75rem">Save Attendance</button>
+    <% } %>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

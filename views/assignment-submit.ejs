@@ -1,0 +1,27 @@
+<%- include('partials/header', { title: 'Submit Assignment - University Portal' }) %>
+
+<section class="auth-wrap">
+  <form class="card form-card" method="POST" action="/assignments/submit" enctype="multipart/form-data">
+    <h2>Assignment Submission</h2>
+    <p class="muted">Upload your assignment and get instant AI-based feedback.</p>
+
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <label>Assignment</label>
+    <select name="assignment_id" required>
+      <% assignments.forEach((assignment) => { %>
+        <option value="<%= assignment.id %>"><%= assignment.code %> | <%= assignment.title %> (Due: <%= assignment.due_date %>)</option>
+      <% }) %>
+    </select>
+
+    <label>Upload File</label>
+    <input type="file" name="assignment_file" required accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt,.md" />
+    <small>Accepted: PDF, DOC/DOCX, PNG/JPG, TXT/MD (max 10 MB)</small>
+
+    <button class="btn" type="submit" style="margin-top:0.5rem">Submit & Evaluate</button>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

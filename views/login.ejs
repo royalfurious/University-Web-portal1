@@ -1,0 +1,35 @@
+<%- include('partials/header', { title: 'Login - University Portal' }) %>
+
+<section class="auth-wrap">
+  <form class="card form-card" method="POST" action="/login">
+    <h2>Portal Login</h2>
+    <p class="muted">Faculty, students, and admin can sign in here.</p>
+
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <% if (typeof message !== 'undefined' && message) { %>
+      <p class="success"><%= message %></p>
+    <% } %>
+
+    <label>Email</label>
+    <input type="email" name="email" required placeholder="you@uni.edu" />
+
+    <label>Password</label>
+    <input type="password" name="password" required placeholder="********" />
+
+    <button class="btn" type="submit">Login</button>
+
+    <p class="muted auth-switch">New here? <a href="/register">Create an account</a></p>
+
+    <div class="demo-box">
+      <p><strong>Demo Credentials:</strong></p>
+      <p>Faculty: faculty@uni.edu / faculty123</p>
+      <p>Student: student1@uni.edu / student123</p>
+      <p>Admin: admin@uni.edu / admin123</p>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

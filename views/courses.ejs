@@ -1,0 +1,24 @@
+<%- include('partials/header', { title: 'Courses - University Portal' }) %>
+
+<section class="card single">
+  <h2>Courses</h2>
+  <p class="muted">Browse academic courses with assigned faculty and enrollment details.</p>
+</section>
+
+<section class="cards">
+  <% if (!courses || courses.length === 0) { %>
+    <article class="card">
+      <p>No courses available yet.</p>
+    </article>
+  <% } else { %>
+    <% courses.forEach((course) => { %>
+      <article class="card">
+        <h3><%= course.code %> - <%= course.title %></h3>
+        <p><strong>Faculty:</strong> <%= course.faculty_name || 'TBA' %></p>
+        <p><strong>Students Enrolled:</strong> <%= course.student_count %></p>
+      </article>
+    <% }) %>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

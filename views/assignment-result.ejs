@@ -1,0 +1,32 @@
+<%- include('partials/header', { title: 'Evaluation Result - University Portal' }) %>
+
+<section class="card single">
+  <h2>Evaluation Result</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.5rem;margin-top:0.75rem">
+    <p><strong>Student:</strong> <%= submission.full_name %></p>
+    <p><strong>Assignment:</strong> <%= submission.assignment_title %></p>
+    <p><strong>File:</strong> <%= submission.file_name %></p>
+    <p><strong>Submitted:</strong> <%= submission.submitted_at %></p>
+    <p><strong>Mode:</strong> <%= submission.evaluation_mode %></p>
+  </div>
+</section>
+
+<section class="cards metrics">
+  <article class="card" style="text-align:center"><h4>Overall Score</h4><p class="score"><%= feedback.score ?? 'N/A' %>/100</p></article>
+  <article class="card" style="text-align:center"><h4>Grammar</h4><p class="score"><%= feedback.grammar ?? 'N/A' %>/100</p></article>
+  <article class="card" style="text-align:center"><h4>Relevance</h4><p class="score"><%= feedback.relevance ?? 'N/A' %>/100</p></article>
+  <article class="card" style="text-align:center"><h4>Originality</h4><p class="score"><%= feedback.originality ?? 'N/A' %>/100</p></article>
+</section>
+
+<section class="card single">
+  <h3>Feedback Summary</h3>
+  <p><%= feedback.summary || 'No summary provided.' %></p>
+  <h4>Suggestions</h4>
+  <ul>
+    <% (feedback.suggestions || []).forEach((item) => { %>
+      <li><%= item %></li>
+    <% }) %>
+  </ul>
+</section>
+
+<%- include('partials/footer') %>

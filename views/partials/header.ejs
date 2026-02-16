@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title || 'CampusHub' %></title>
+  <link rel="icon" type="image/jpeg" href="/public/images/university%20logo.jpg" />
+  <link rel="stylesheet" href="/public/css/styles.css" />
+</head>
+<body>
+  <header class="top-header">
+    <div class="header-inner">
+
+      <%/* ── LEFT: Brand ── */%>
+      <div class="brand-wrap">
+        <img src="/public/images/university%20logo.jpg" alt="University Logo" class="logo" />
+        <div>
+          <h1>CampusHub</h1>
+          <p class="motto">Learn &bull; Innovate &bull; Lead</p>
+        </div>
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
+
+      <%/* ── CENTER: Navigation Links ── */%>
+      <nav class="main-nav" id="mainNav">
+
+        <% if (!currentUser) { %>
+          <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a>
+          <a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>">About Us</a>
+          <a href="/courses" class="<%= currentPath === '/courses' ? 'active' : '' %>">Courses</a>
+        <% } %>
+
+        <% if (currentUser && currentUser.role === 'student') { %>
+          <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a>
+          <a href="/dashboard" class="<%= currentPath === '/dashboard' ? 'active' : '' %>">Dashboard</a>
+          <a href="/courses" class="<%= currentPath === '/courses' ? 'active' : '' %>">Courses</a>
+          <a href="/assignments/submit" class="<%= currentPath === '/assignments/submit' ? 'active' : '' %>">Submit Assignment</a>
+          <a href="/attendance/my" class="<%= currentPath === '/attendance/my' ? 'active' : '' %>">My Attendance</a>
+        <% } %>
+
+        <% if (currentUser && currentUser.role === 'faculty') { %>
+          <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a>
+          <a href="/dashboard" class="<%= currentPath === '/dashboard' ? 'active' : '' %>">Dashboard</a>
+          <a href="/courses" class="<%= currentPath === '/courses' ? 'active' : '' %>">Courses</a>
+          <a href="/attendance/mark" class="<%= currentPath === '/attendance/mark' ? 'active' : '' %>">Mark Attendance</a>
+          <a href="/attendance/records" class="<%= currentPath === '/attendance/records' ? 'active' : '' %>">Attendance Records</a>
+          <a href="/assignments/faculty" class="<%= currentPath === '/assignments/faculty' ? 'active' : '' %>">Submissions</a>
+        <% } %>
+
+        <% if (currentUser && currentUser.role === 'admin') { %>
+          <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a>
+          <a href="/dashboard" class="<%= currentPath === '/dashboard' ? 'active' : '' %>">Dashboard</a>
+          <a href="/courses" class="<%= currentPath === '/courses' ? 'active' : '' %>">Courses</a>
+          <a href="/attendance/report" class="<%= currentPath === '/attendance/report' ? 'active' : '' %>">Attendance Report</a>
+          <a href="/assignments/manage" class="<%= currentPath === '/assignments/manage' ? 'active' : '' %>">All Submissions</a>
+          <a href="/admin" class="<%= currentPath === '/admin' ? 'active' : '' %>">Admin Panel</a>
+        <% } %>
+
+      </nav>
+
+      <%/* ── RIGHT: Auth Actions ── */%>
+      <div class="header-actions">
+        <% if (currentUser) { %>
+          <span class="user-badge"><%= currentUser.full_name %></span>
+          <form action="/logout" method="POST" class="inline-form">
+            <button type="submit" class="logout-btn">Logout</button>
+          </form>
+        <% } else { %>
+          <a href="/login" class="nav-accent">Login</a>
+          <a href="/register" class="nav-accent">Register</a>
+        <% } %>
+      </div>
+
+    </div>
+  </header>
+  <main class="container">

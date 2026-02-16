@@ -1,0 +1,33 @@
+<%- include('partials/header', { title: 'Register - University Portal' }) %>
+
+<section class="auth-wrap">
+  <form class="card form-card" method="POST" action="/register">
+    <h2>Create Account</h2>
+    <p class="muted">Register as Student or Faculty to access the portal.</p>
+
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <label>Full Name</label>
+    <input type="text" name="full_name" required placeholder="Your full name" />
+
+    <label>Email</label>
+    <input type="email" name="email" required placeholder="you@uni.edu" />
+
+    <label>Password</label>
+    <input type="password" name="password" required minlength="6" placeholder="Minimum 6 characters" />
+
+    <label>Role</label>
+    <select name="role" required>
+      <option value="student">Student</option>
+      <option value="faculty">Faculty</option>
+    </select>
+
+    <button class="btn" type="submit">Register</button>
+
+    <p class="muted auth-switch">Already have an account? <a href="/login">Login</a></p>
+  </form>
+</section>
+
+<%- include('partials/footer') %>

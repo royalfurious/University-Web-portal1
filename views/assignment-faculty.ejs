@@ -1,0 +1,41 @@
+<%- include('partials/header', { title: 'Faculty Submissions - University Portal' }) %>
+
+<section class="card single">
+  <h2>Submissions</h2>
+  <p class="muted">View submissions from students in your assigned classes.</p>
+</section>
+
+<section class="card single">
+  <% if (!submissions || submissions.length === 0) { %>
+    <p>No submissions found for your classes yet.</p>
+  <% } else { %>
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Submitted At</th>
+          <th>Student</th>
+          <th>Class</th>
+          <th>Assignment</th>
+          <th>Score</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% submissions.forEach((row) => { %>
+          <tr>
+            <td><%= row.submitted_at %></td>
+            <td><%= row.student_name %></td>
+            <td><%= row.class_code %></td>
+            <td><%= row.assignment_title %></td>
+            <td><%= row.score ?? 'N/A' %></td>
+            <td><a href="/assignments/result/<%= row.id %>">Open</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>
