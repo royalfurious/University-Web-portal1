@@ -84,6 +84,21 @@ router.get('/faculty', ensureRole('faculty'), async (req, res) => {
   });
 });
 
+router.get('/my', ensureRole('student'), async (req, res) => {
+  const submissions = await all(`SELECT s.id, s.submitted_at, s.score, s.evaluation_mode,
+    s.file_name, a.title AS assignment_title, c.code AS class_code
+    FROM submissions s
+    JOIN assignments a ON s.assignment_id = a.id
+    JOIN classes c ON a.class_id = c.id
+    WHERE s.student_id = ?
+    ORDER BY s.submitted_at DESC`, [req.session.user.id]);
+
+  return res.render('assignment-my', {
+    user: req.session.user,
+    submissions
+  });
+});
+
 router.post('/submit', ensureRole('student'), upload.single('assignment_file'), async (req, res) => {
   try {
     if (!req.file) {

@@ -1,0 +1,48 @@
+<%- include('partials/header', { title: 'My Submissions - University Portal' }) %>
+
+<section class="card single">
+  <h2>My Submissions</h2>
+  <p class="muted">View all your assignment submissions and evaluation results.</p>
+</section>
+
+<section class="card single">
+  <% if (!submissions || submissions.length === 0) { %>
+    <p>You haven't submitted any assignments yet.</p>
+    <a href="/assignments/submit" class="btn" style="margin-top:0.75rem">Submit Assignment</a>
+  <% } else { %>
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Submitted</th>
+          <th>Class</th>
+          <th>Assignment</th>
+          <th>File</th>
+          <th>Score</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% submissions.forEach((row) => { %>
+          <tr>
+            <td><%= row.submitted_at %></td>
+            <td><%= row.class_code %></td>
+            <td><%= row.assignment_title %></td>
+            <td><%= row.file_name %></td>
+            <td>
+              <% if (row.score != null) { %>
+                <span class="badge <%= row.score >= 70 ? 'green' : 'red' %>"><%= row.score %>/100</span>
+              <% } else { %>
+                N/A
+              <% } %>
+            </td>
+            <td><a href="/assignments/result/<%= row.id %>" class="btn btn-sm">View</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

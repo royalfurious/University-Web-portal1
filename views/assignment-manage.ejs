@@ -18,7 +18,6 @@
           <th>Class</th>
           <th>Assignment</th>
           <th>Score</th>
-          <th>Mode</th>
           <th>Result</th>
         </tr>
       </thead>
@@ -30,7 +29,6 @@
             <td><%= row.class_code %></td>
             <td><%= row.assignment_title %></td>
             <td><%= row.score ?? 'N/A' %></td>
-            <td><%= row.evaluation_mode || 'N/A' %></td>
             <td><a href="/assignments/result/<%= row.id %>">View</a></td>
           </tr>
         <% }) %>

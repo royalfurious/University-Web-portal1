@@ -1,32 +1,133 @@
 <%- include('partials/header', { title: 'Evaluation Result - University Portal' }) %>
 
-<section class="card single">
-  <h2>Evaluation Result</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.5rem;margin-top:0.75rem">
-    <p><strong>Student:</strong> <%= submission.full_name %></p>
-    <p><strong>Assignment:</strong> <%= submission.assignment_title %></p>
-    <p><strong>File:</strong> <%= submission.file_name %></p>
-    <p><strong>Submitted:</strong> <%= submission.submitted_at %></p>
-    <p><strong>Mode:</strong> <%= submission.evaluation_mode %></p>
+<%
+  // Format the submitted_at date nicely
+  const rawDate = submission.submitted_at;
+  let formattedDate = rawDate;
+  try {
+    const d = new Date(rawDate);
+    if (!isNaN(d.getTime())) {
+      formattedDate = d.toLocaleDateString('en-IN', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      }) + ' at ' + d.toLocaleTimeString('en-IN', {
+        hour: '2-digit', minute: '2-digit', hour12: true
+      });
+    }
+  } catch (_) {}
+
+  function scoreColor(val) {
+    const n = Number(val);
+    if (isNaN(n)) return '#64748b';
+    if (n >= 80) return '#16a34a';
+    if (n >= 60) return '#d97706';
+    return '#dc2626';
+  }
+
+  function scoreLabel(val) {
+    const n = Number(val);
+    if (isNaN(n)) return '';
+    if (n >= 90) return 'Excellent';
+    if (n >= 80) return 'Very Good';
+    if (n >= 70) return 'Good';
+    if (n >= 60) return 'Fair';
+    return 'Needs Work';
+  }
+
+%>
+
+<!-- Page heading -->
+<section class="result-header card single">
+  <div class="result-header-top">
+    <h2>Evaluation Result</h2>
+  </div>
+  <p class="muted">Submission details and feedback</p>
+</section>
+
+<!-- Submission info -->
+<section class="result-info">
+  <div class="info-item">
+    <span class="info-icon">👤</span>
+    <div>
+      <span class="info-label">Student</span>
+      <span class="info-value"><%= submission.full_name %></span>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">📝</span>
+    <div>
+      <span class="info-label">Assignment</span>
+      <span class="info-value"><%= submission.assignment_title %></span>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">📄</span>
+    <div>
+      <span class="info-label">File</span>
+      <span class="info-value"><%= submission.file_name %></span>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">🕒</span>
+    <div>
+      <span class="info-label">Submitted</span>
+      <span class="info-value"><%= formattedDate %></span>
+    </div>
   </div>
 </section>
 
+<!-- Score cards -->
 <section class="cards metrics">
-  <article class="card" style="text-align:center"><h4>Overall Score</h4><p class="score"><%= feedback.score ?? 'N/A' %>/100</p></article>
-  <article class="card" style="text-align:center"><h4>Grammar</h4><p class="score"><%= feedback.grammar ?? 'N/A' %>/100</p></article>
-  <article class="card" style="text-align:center"><h4>Relevance</h4><p class="score"><%= feedback.relevance ?? 'N/A' %>/100</p></article>
-  <article class="card" style="text-align:center"><h4>Originality</h4><p class="score"><%= feedback.originality ?? 'N/A' %>/100</p></article>
+  <% const scores = [
+    { label: 'Overall Score', value: feedback.score },
+    { label: 'Grammar', value: feedback.grammar },
+    { label: 'Relevance', value: feedback.relevance },
+    { label: 'Originality', value: feedback.originality }
+  ]; %>
+  <% scores.forEach(function(s) { %>
+    <article class="card score-card">
+      <h4><%= s.label %></h4>
+      <div class="score-ring">
+        <svg viewBox="0 0 36 36" class="circular-chart">
+          <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+          <path class="circle" stroke="<%= scoreColor(s.value) %>"
+            stroke-dasharray="<%= s.value != null ? s.value : 0 %>, 100"
+            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+        </svg>
+        <span class="score-number" style="color:<%= scoreColor(s.value) %>">
+          <%= s.value != null ? s.value : 'N/A' %>
+        </span>
+      </div>
+      <span class="score-tag" style="color:<%= scoreColor(s.value) %>"><%= scoreLabel(s.value) %></span>
+    </article>
+  <% }); %>
 </section>
 
-<section class="card single">
-  <h3>Feedback Summary</h3>
-  <p><%= feedback.summary || 'No summary provided.' %></p>
-  <h4>Suggestions</h4>
-  <ul>
-    <% (feedback.suggestions || []).forEach((item) => { %>
-      <li><%= item %></li>
-    <% }) %>
-  </ul>
+<!-- Feedback section -->
+<section class="card single feedback-section">
+  <h3>📋 Feedback Summary</h3>
+  <p class="feedback-text"><%= feedback.summary || 'No summary provided.' %></p>
+
+  <% if (feedback.suggestions && feedback.suggestions.length) { %>
+    <h4>💡 Suggestions for Improvement</h4>
+    <ul class="suggestion-list">
+      <% feedback.suggestions.forEach(function(item, i) { %>
+        <li>
+          <span class="suggestion-num"><%= i + 1 %></span>
+          <span><%= item %></span>
+        </li>
+      <% }); %>
+    </ul>
+  <% } %>
 </section>
+
+<div style="text-align:center;margin-bottom:1.5rem">
+  <% if (user.role === 'student') { %>
+    <a href="/assignments/submit" class="btn">← Submit Another</a>
+  <% } else if (user.role === 'faculty') { %>
+    <a href="/assignments/faculty" class="btn">← Back to Submissions</a>
+  <% } else if (user.role === 'admin') { %>
+    <a href="/assignments/manage" class="btn">← Back to Submissions</a>
+  <% } %>
+</div>
 
 <%- include('partials/footer') %>
