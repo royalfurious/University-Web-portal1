@@ -53,12 +53,6 @@ A dynamic university portal with:
    GEMINI_API_KEY=your_key_here
    AI_EVALUATION_MODE=auto
    ```
-
-   `AI_EVALUATION_MODE` options:
-   - `auto` (default): tries Gemini when available, falls back to heuristic
-   - `heuristic`: always skip Gemini and use local heuristic scoring
-   - `gemini`: prefer Gemini, but still falls back to heuristic if API fails
-
 5. Start app:
 
    ```bash
@@ -66,20 +60,7 @@ A dynamic university portal with:
    ```
 
 6. Open: `http://localhost:3000`
-
-## MySQL Workbench Connection
-
-Use these values in your Workbench dialog:
-
-- Connection Name: `university_portal`
-- Hostname: `127.0.0.1`
-- Port: `3306`
-- Username: `root`
-- Password: your local MySQL root password
-- Default Schema: `university_portal`
-
-Click **Test Connection** first, then run the app. The app creates `university_portal` and all tables automatically if they do not exist.
-
+   
 ## Demo Credentials
 
 - Faculty: `faculty@uni.edu` / `faculty123`
@@ -112,9 +93,3 @@ Click **Test Connection** first, then run the app. The app creates `university_p
 - Feedback and score stored in DB (`submissions` table)
 - Uses Gemini when key/quota are available; otherwise heuristic analysis
 
-## Notes for Production Upgrade
-
-- Add migration tooling (Prisma/Knex/Flyway) for versioned schema changes
-- Add CSRF protection, stronger validation, and secure session store
-- Add plagiarism API integration and document text extraction pipeline (PDF/DOCX OCR)
-- Add complete admin CRUD for users/courses
